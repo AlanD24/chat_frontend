@@ -1,0 +1,176 @@
+.limiter {
+  width: 100%;
+  margin: 0 auto;
+  background: #E8ECF8;
+}
+
+.loginContainer {
+  width: 100%;  
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+}
+
+
+// Form container
+.formContainer {
+  width: 390px;
+  min-height: 500px;
+  height: auto;
+  background: #fff;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+// Form
+.form {
+  width: 100%;
+  padding: 20px 20px;
+}
+
+.userImage {
+  margin: 0 auto;
+}
+
+.formTitle {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.inputContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: column;
+  margin-bottom: 15px;
+
+  label {
+    width: 90%;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+}
+
+.label {
+  color: #1976d2;
+}
+
+.fullWidthInput {
+  width: 90%;
+  margin-top: 10px;
+  padding: 0;
+  border-radius: 4px;
+  font-size: 16px;
+
+  label {
+    margin-top: -5px;
+    font-size: 14px;
+  }
+
+  input {
+    padding: 10px 10px;
+  }
+
+  &:focus {
+    outline-color: #1976d2;
+  }
+
+  &:focus-within label {
+    margin-top: 0 !important;
+  }
+
+  &:focus-within input {
+    color: #1976d2;
+  }
+
+}
+
+.passwordInput {
+  width: 90%;
+  margin: 0;
+  margin-top: 15px;
+
+  input {
+    padding: 10px 10px;
+  }
+}
+
+.passwordLabel {
+  font-size: 14px;
+  margin-top: -5px;
+}
+
+.passwordOutlinedInput:focus-within ~ .passwordLabel {
+  margin-top: 0;
+}
+
+.passwordOutlinedInput:focus-within {
+  color: #1976d2;
+}
+
+// Btn to submit form
+.btnContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  button {
+    background-color: #39AFE5;
+    transition: all 200ms ease-out;
+    border-radius: 5px;
+    padding: 6px 0;
+    color: white;
+    width: 90%;
+
+    &:hover {
+      background-color: #125F82;
+    }
+  }
+}
+
+// Just for login page, not for create account
+.lastOptsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 15px;
+}
+
+.columnOption {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+
+  label {
+    margin-left: 5px
+  }
+
+  a {
+    color: #39AFE5;
+    transition: all 200ms ease-out;
+    font-weight: 600;
+    
+    &:hover {
+      color: #125F82;
+    }
+  }
+}

@@ -1,9 +1,7 @@
-import '../styles/globals.css';
+import Login from './login';
 
 export default function Home() {
   return (
-    <div className='home'>
-      <h1>Chatbot</h1>
-    </div>
+    <Login></Login>
   )
 }
