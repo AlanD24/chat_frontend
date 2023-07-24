@@ -1,0 +1,379 @@
+.chatContainer {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+// First section
+.sideNavOpts {
+    width: 3%;
+    height: 100%;
+    background-color: #E8ECF8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0 10px 0;
+
+    .icons {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.icon {
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    color: #736F6F;
+    transition: all 500ms ease-out;
+    background-color: #CBD1E5;
+    border-radius: 50%;
+
+    svg {
+        font-size: 25px;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: #0A50B3;
+        border-radius: 50%;
+    }
+}
+
+.logoutIcon {
+    svg {
+        font-size: 20px;
+    }
+
+    &:hover {
+        background-color: #0A50B3;
+        color: white;
+    }
+}
+
+.iconDark:hover {
+    color: white;
+    background-color: #3A3B3C; 
+}
+
+/******************** CUSTOM ICONS ********************/
+.sideIcon:hover {
+    color: white;
+}
+
+.settingsIcon:hover {
+    color: #47D42E;
+}
+
+// for active icon
+.active {
+    color: white;
+    background-color: #0A50B3; 
+    border-radius: 50%;
+}
+
+.darkModeActive {
+    color: #F7CB63;
+    background-color: #3A3B3C;
+    border-radius: 50%;
+    transition: all 800ms ease-out;
+
+    &:hover {
+        color: white;
+        background-color: #3A3B3C; 
+    }
+}
+/******************** CUSTOM ICONS ********************/
+
+
+// Second section: /components/ContactsList.tsx
+.recentChats {
+    width: 27%;
+    height: 100%;
+    background-color: #F0F2F5;
+    padding: 30px 20px;
+}
+
+.userData {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 95%;
+    margin: 0 auto;
+
+    img {
+        border-radius: 50%;
+    }
+}
+
+.userName {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: calc(80% - 70px);
+
+    h3 {
+        color: #0A50B3;
+        font-weight: 600;
+        font-size: 22px;
+    }
+
+    p {
+        font-size: 16px;
+    }
+}
+
+.editIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #CBD1E5;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    transition: all 500ms ease-out;
+
+    svg {
+        font-size: 30px;
+        transition: all 500ms ease-out;
+        color: #736F6F;
+    }
+
+    &:hover {
+        background-color: #083C86;
+        svg {
+            color: white;
+            cursor: pointer;
+        }
+    }
+}
+
+.searchContainer {
+    width: 100%;
+    margin: 30px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.searchBar {
+    width: 95%;
+    background-color: white;
+    border-radius: 30px;
+}
+
+.searchInput:focus-within {
+    color: #1976d2;
+}
+
+.conversations {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.activeUser {
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 5px 0;
+    padding: 10px 5px;
+    border-radius: 5px;
+
+    &:hover {
+        background-color: #CBD1E5;
+        cursor: pointer;
+    }
+}
+
+.activeUserImg {
+    width: 15%;
+}
+
+.activeUserData {
+    width: 85%;
+    padding-left: 10px;
+}
+
+.innerUserData {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+
+    h5 {
+        color: #0A50B3;
+        font-weight: 600;
+    }
+
+    p {
+        width: 95%;
+    }
+}
+
+.deliverMessage {
+    color: grey;
+    font-size: 14px;
+}
+
+.messagesNotRead {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color:#083C86;
+    line-height: 25px;
+    color: white;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    span {
+        display: inline-block;
+        width: 100%;
+        font-size: 13px;
+        font-weight: bold;
+    }
+}
+
+// Ends second section
+
+// Third section: /components/Messages.tsx
+.messages {
+    width: 70%;
+    height: 100%;
+    background-color: #E8ECF8;
+}
+
+.topMessages {
+    height: 18%;
+    width: 100%;
+    background-color: #CBD1E5;
+    border-bottom: 1px solid grey;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;
+}
+
+.topLeftContent {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.topImage {
+    width: 100px;
+    height: 100px;
+}
+
+.topUserContent {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10px;
+
+    h5 {
+        color: #0A50B3;
+        font-size: 20px;
+        font-weight: 600;
+        width: 100%;
+    }
+
+    p {
+        color: #4A4B50;
+        width: 100%;
+    }
+}
+
+.midMessages {
+    height: 72%;
+    padding: 20px;
+}
+
+.incomingMsg {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+.outgoingMsg {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-bottom: 10px;
+}
+
+.outgoingMsg_Text {
+    background-color: #0A50B3;
+    border-radius: 8px 8px 0 8px;
+    padding: 5px 10px;
+    color: white;
+    margin-right: 5px;
+    max-width: 40%;
+}
+
+.incomingMsg_Text {
+    background-color: #CBD1E5;
+    border-radius: 8px 8px 8px 0;
+    padding: 5px 10px;
+    color: #4A4B50;
+    margin-left: 5px;
+    max-width: 40%;
+}
+
+.endMessages {
+    background-color: #CBD1E5;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sendMessageBar {
+    width: 80%;
+    background-color: #E8ECF8;
+    border-radius: 30px;
+    outline: none;
+    border: none;
+
+    fieldset legend {
+        width: 100px;
+    }
+}
+
+.sendMessage__icon {
+    background-color: #0A50B3 !important;
+    height: 50px;
+    width: 50px;
+    z-index: 20;
+    border-radius: 50%;
+
+    svg {
+        color: white;
+    }
+}
+// Ends third section
+
+// Modal styles begin
+.cancelBtn {
+    background-color: #E8ECF8 !important;
+    color: black;
+
+    &:hover {
+        background-color: #C9D5F6 !important;
+    }
+}
+// Modal styles end

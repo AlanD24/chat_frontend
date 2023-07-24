@@ -2,10 +2,12 @@ import styles from '../../styles/Login.module.scss';
 import '../../styles/globals.css';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Create, Visibility, VisibilityOff } from '@mui/icons-material';
 import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { AuthContext, AuthProvider } from '@/auth/AuthContext';
 
 export interface formInputs {
     email: Object;
@@ -17,7 +19,7 @@ type StateUpdateFunctions = {
     [key: string]: Dispatch<SetStateAction<string>>;
 };
 
-export default function CreateAccount() {
+export function CreateAccount() {
 
     // useState for inputs
     const [name, setName] = useState('');
@@ -39,16 +41,20 @@ export default function CreateAccount() {
     // Use nextjs router
     const router = useRouter();
 
+    // Use authContext
+    const { createAccount } = useContext( AuthContext );
+
+    // Redirect to login
+    const redirectToLogin = () => {
+        router.push('/');
+    }
+
     // Do dynamic changes in inputs value
     const stateUpdateFunctions: StateUpdateFunctions = {
         name: setName,
         email: setEmail,
         password1: setPassword1,
         password2: setPassword2
-    }
-
-    function isValidEmail(email: string) {
-        return /\S+@\S+\.\S+/.test(email);
     }
 
     // Executed every time an input changes
@@ -64,7 +70,11 @@ export default function CreateAccount() {
         if (updateState) updateState(value);
     }
 
-    async function createAccount(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+    function saveToken(token: string): void {
+        localStorage.setItem('token', token);
+    }
+
+    async function createUserAccount(e: React.FormEvent<HTMLFormElement>): Promise<void> {
         // Prevent reload page
         e.preventDefault();
 
@@ -78,28 +88,23 @@ export default function CreateAccount() {
         const arePasswordsValid = validatePasswords();
         if(!arePasswordsValid) return;
 
-        // Send data and set url of petition
-        const dataToSend = JSON.stringify({ name, email, password1, password2 });
-        const url = 'http://localhost:8080/api/auth/create-user';
-
-        // Send petition to backend
-        const response = await fetch(url, {
-            method: 'POST',
-            body: dataToSend,
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const finalRes = await response.json();
-
-        // If succeed
-        if(finalRes.user && finalRes.token) {
-            toast.success('Account created!');
-            setTimeout(() => {
-                router.push('/login');
-            }, 1500);
-        } else
+        try {
+            // Send petition to backend (using our authContext)
+            const response = await createAccount(email, name, password1, password2);
+            
+            // If succeed, show toast and save token
+            if(response.user && response.token) {
+                toast.success('Account created!');
+                saveToken(response.token);
+                
+                setTimeout(() => {
+                    router.push('/chat');
+                }, 1500);
+            } else
+                toast.error('Ups! Your account could not be created');
+        } catch (error) {
             toast.error('Ups! Your account could not be created');
+        }
     }
 
     function validateName(): boolean {
@@ -113,15 +118,25 @@ export default function CreateAccount() {
         return isValid;
     }
 
+    useEffect(() => {
+        const userToken = localStorage.getItem('token');
+        if(userToken)
+            router.push('/chat');
+    }, []);
+
     function validateEmail(): boolean {
         let isValid: boolean = true;
 
-        if(email == '' && !isValidEmail(email)) {
+        if(email == '' || !isValidEmail(email)) {
             toast.error('Email is not valid');
             isValid = false;
         }
 
         return isValid;
+    }
+
+    function isValidEmail(email: string) {
+        return /\S+@\S+\.\S+/.test(email);
     }
 
     function validatePasswords(): boolean {
@@ -154,18 +169,40 @@ export default function CreateAccount() {
 
     return <div className={styles.limiter}>
         <div className={styles.loginContainer}>
-        
+
             <div className={styles.formContainer}>
-                <form className={styles.form} onSubmit={createAccount}>
-                    <Image className={styles.userImage} src='/user.png' alt='userImg' width={100} height={100}></Image>
+                {/* Form begins */}
+                <form className={styles.form} onSubmit={ createUserAccount }>
+                    {/* Back to login icon */}
+                    <div className={styles.backToLogin}>
+                        <ArrowBackIcon 
+                            className={styles.backArrow}
+                            onClick={ redirectToLogin }
+                        />
+                    </div>
+                    {/* /Back to login icon */}
+
+                    {/* Image */}
+                    <div className={styles.imageContainer}>
+                        <Image 
+                            className={styles.userImage} 
+                            src='/luffy_wano.jpg'
+                            alt='userImg' 
+                            width={100} 
+                            height={100}
+                            objectFit="cover"
+                        ></Image>
+                    </div>
+                    {/* /Image */}
 
                     <span className={styles.formTitle}>
                         Create account
                     </span>
 
+                    {/* Name field */}
                     <div className={styles.inputContainer}>
                         <TextField
-                            className={styles.fullWidthInput}
+                            className={`${styles.fullWidthInput} ${name.length > 0 ? styles.hasContent : ''}`}
                             label="Name" 
                             variant="outlined"
                             type="text" 
@@ -173,12 +210,15 @@ export default function CreateAccount() {
                             placeholder="Enter your name and lastname"
                             value={name}
                             onChange={ handleInputChange }
+                            autoComplete='userName'
                         />
                     </div>
+                    {/* /Name field */}
                     
+                    {/* Email field */}
                     <div className={styles.inputContainer}>
                         <TextField
-                            className={styles.fullWidthInput}
+                            className={`${styles.fullWidthInput} ${email.length > 0 ? styles.hasContent : ''}`}
                             label="Email" 
                             variant="outlined"
                             type="text" 
@@ -186,9 +226,12 @@ export default function CreateAccount() {
                             placeholder="Enter your email"
                             value={email}
                             onChange={ handleInputChange }
+                            autoComplete='userEmail'
                         />
                     </div>
+                    {/* /Email field */}
                     
+                    {/* Password 1 field */}
                     <div className={styles.inputContainer}>
                         <FormControl variant="outlined" className={styles.passwordInput}>
                             <OutlinedInput
@@ -210,17 +253,24 @@ export default function CreateAccount() {
                                     </IconButton>
                                 </InputAdornment>
                                 }
+                                autoComplete='new-password'
                             />
-                            <InputLabel className={styles.passwordLabel}>Password</InputLabel>
+                            <InputLabel 
+                                className={`${styles.passwordLabel} ${password1.length > 0 ? styles.noMargin : ''}`}
+                            >
+                                Password
+                            </InputLabel>
                         </FormControl>
                     </div>
-
+                    {/* /Password 1 field */}
+                    
+                    {/* Password 2 field */}
                     <div className={styles.inputContainer}>
                         <FormControl variant="outlined" className={styles.passwordInput}>
                             <OutlinedInput
                                 className={styles.passwordOutlinedInput}
                                 type={showPassword2 ? 'text' : 'password'}
-                                label="Password"
+                                label="Repeated password"
                                 name="password2"
                                 value={ password2 }
                                 onChange={ handleInputChange }
@@ -236,15 +286,23 @@ export default function CreateAccount() {
                                     </IconButton>
                                 </InputAdornment>
                                 }
+                                autoComplete='new-password-confirm'
                             />
-                            <InputLabel className={styles.passwordLabel}>Repeat pass</InputLabel>
+                            <InputLabel 
+                                className={`${styles.passwordLabel} ${password2.length > 0 ? styles.noMargin : ''} ${styles.customLabel}`}
+                            >
+                                Repeat pass
+                            </InputLabel>
                         </FormControl>
                     </div>
+                    {/* Password 2 field */}
 
                     <div className={styles.btnContainer}>
                         <button type='submit'>
                             Submit
                         </button>
+
+                        {/* Show toasts */}
                         <Toaster
                             toastOptions={{
                                 success: {
@@ -259,9 +317,19 @@ export default function CreateAccount() {
                                 },
                             }}
                         />
+                        {/* /Show toasts */}
                     </div>
                 </form>
+                {/* Form ends */}
             </div>
         </div>
     </div>
+}
+
+export default function NewAccount(props: any) {
+    return (
+        <AuthProvider>
+            <CreateAccount {...props}></CreateAccount>
+        </AuthProvider>
+    )
 }

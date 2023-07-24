@@ -22,7 +22,7 @@
 // Form container
 .formContainer {
   width: 390px;
-  min-height: 500px;
+  min-height: 450px;
   height: auto;
   background: #fff;
   border-radius: 10px;
@@ -37,8 +37,25 @@
   padding: 20px 20px;
 }
 
-.userImage {
+.backToLogin {
+  width: 90%;
   margin: 0 auto;
+
+  .backArrow {
+    transition: all 500ms ease-out;
+  
+    &:hover {
+      color: #1976d2;
+      cursor: pointer;
+    }
+  }
+}
+
+.imageContainer {
+  .userImage {
+    margin: 0 auto;
+    border-radius: 50%;
+  }
 }
 
 .formTitle {
@@ -60,9 +77,9 @@
   margin-bottom: 15px;
 
   label {
-    width: 90%;
     font-weight: 600;
     margin-bottom: 5px;
+    background-color: white;
   }
 }
 
@@ -86,18 +103,19 @@
     padding: 10px 10px;
   }
 
-  &:focus {
-    outline-color: #1976d2;
-  }
-
   &:focus-within label {
     margin-top: 0 !important;
+    background-color: white;
   }
 
   &:focus-within input {
     color: #1976d2;
   }
 
+}
+
+.hasContent label {
+  margin-top: 0;
 }
 
 .passwordInput {
@@ -115,6 +133,14 @@
   margin-top: -5px;
 }
 
+.noMargin {
+  margin-top: 0;
+}
+
+.customLabel {
+  width: 90px;
+}
+
 .passwordOutlinedInput:focus-within ~ .passwordLabel {
   margin-top: 0;
 }
@@ -129,6 +155,7 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  margin-bottom: 20px;
 
   button {
     background-color: #39AFE5;

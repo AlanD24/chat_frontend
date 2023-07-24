@@ -1,16 +1,19 @@
 import styles from '../../styles/Login.module.scss';
 import '../../styles/globals.css';
 import Image from 'next/image';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
+import { AuthContext } from '@/auth/AuthContext';
+import { fetchWithoutToken } from '@/helpers/fetch';
 
 type StateUpdateFunctions = {
     [key: string]: Dispatch<SetStateAction<string>>;
 };
 
-export default function Login() {
+export default function LoginPage() {
 
     // useState for inputs
     const [email, setEmail] = useState('');
@@ -24,10 +27,16 @@ export default function Login() {
         event.preventDefault();
     };
 
+    // Use nextjs router
+    const router = useRouter();
+
+    // Use authContext
+    const { login } = useContext( AuthContext );
+
     // Do dynamic changes in inputs value
     const stateUpdateFunctions: StateUpdateFunctions = {
         email: setEmail,
-        password1: setPassword
+        password: setPassword
     }
 
     // Executed every time an input changes
@@ -43,16 +52,88 @@ export default function Login() {
         if (updateState) updateState(value);
     }
 
-    function doLoggin(): void {
-        console.log('do loggin');
+    async function doLoggin(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+        // Prevent reload page
+        e.preventDefault();
+
+        // Validate inputs
+        const isEmailValid = validateEmail();
+        if(!isEmailValid) return;
+
+        const isPasswordValid = validatePassword();
+        if(!isPasswordValid) return;
+        
+        try {
+            // Send petition to backend (using our authContext)
+            const response = await login(email, password);
+
+            // If succeed, show toast and save token
+            if(response.user && response.token) {
+                toast.success('Login succesfully');
+                saveToken(response.token);
+                
+                setTimeout(() => {
+                    router.push('/chat');
+                }, 1500);
+            } else
+                toast.error('Ups! Could not log in');
+        } catch (error) {
+            toast.error('Ups! Could not log in');
+        }
     }
+
+    function validateEmail(): boolean {
+        let isValid: boolean = true;
+
+        if(email == '' || !isValidEmail(email)) {
+            toast.error('Email is not valid');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function isValidEmail(email: string) {
+        return /\S+@\S+\.\S+/.test(email);
+    }
+
+    function validatePassword(): boolean {
+        let isValid: boolean = true;
+
+        if(password == '') {
+            toast.error('Enter a password');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    function saveToken(token: string): void {
+        localStorage.setItem('token', token);
+    }
+
+    useEffect(() => {
+        const userToken = localStorage.getItem('token');
+        /* if(userToken)
+            router.push('/chat');
+        */
+    }, []);
 
     return <div className={styles.limiter}>
         <div className={styles.loginContainer}>
         
             <div className={styles.formContainer}>
-                <form className={styles.form}>
-                    <Image className={styles.userImage} src='/user.png' alt='user' width={100} height={100}></Image>
+                <form className={styles.form} onSubmit={ doLoggin }>
+                    <div className={styles.imageContainer}>
+                        <Image 
+                            className={styles.userImage} 
+                            src='/user.png' 
+                            alt='user' 
+                            width={100} 
+                            height={100}
+                            priority={true}
+                        ></Image>
+                    </div>
 
                     <span className={styles.formTitle}>
                         Login
@@ -60,7 +141,7 @@ export default function Login() {
                     
                     <div className={styles.inputContainer}>
                     <TextField
-                            className={styles.fullWidthInput}
+                            className={`${styles.fullWidthInput} ${email.length > 0 ? styles.hasContent : ''}`}
                             label="Email" 
                             variant="outlined"
                             type="text" 
@@ -68,6 +149,7 @@ export default function Login() {
                             placeholder="Enter your email"
                             value={email}
                             onChange={ handleInputChange }
+                            autoComplete="username"
                         />
                     </div>
                     
@@ -77,7 +159,7 @@ export default function Login() {
                                 className={styles.passwordOutlinedInput}
                                 type={showPassword ? 'text' : 'password'}
                                 label="Password"
-                                name="password1"
+                                name="password"
                                 value={ password }
                                 onChange={ handleInputChange }
                                 endAdornment={
@@ -92,13 +174,18 @@ export default function Login() {
                                     </IconButton>
                                 </InputAdornment>
                                 }
+                                autoComplete="current-password"
                             />
-                            <InputLabel className={styles.passwordLabel}>Password</InputLabel>
+                            <InputLabel 
+                                className={`${styles.passwordLabel} ${password.length > 0 ? styles.noMargin : ''}`}
+                            >
+                                Password
+                            </InputLabel>
                         </FormControl>
                     </div>
 
                     <div className={styles.btnContainer}>
-                        <button onClick={() => doLoggin()}>
+                        <button type="submit">
                             Submit
                         </button>
                     </div>
@@ -117,6 +204,21 @@ export default function Login() {
                             </a>
                         </div>
                     </div>
+
+                    <Toaster
+                        toastOptions={{
+                            success: {
+                            style: {
+                                color: 'green',
+                            },
+                            },
+                            error: {
+                                style: {
+                                    color: 'red',
+                                },
+                            },
+                        }}
+                    />
                 </form>
             </div>
         </div>
