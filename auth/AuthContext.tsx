@@ -21,7 +21,6 @@ interface AuthContextType {
     verifyToken: () => Promise<boolean>;
     login: (email: string, password: string) => Promise<any>;
     createAccount: (email: string, name: string, password1: string, password2: string) => Promise<any>;
-    logout: () => void;
     auth: InitialState;
 }
 
@@ -29,7 +28,6 @@ const defaultAuthContext: AuthContextType = {
     verifyToken: () => { return new Promise((res, rej) => { res(true); }) },
     login: (email: string, password: string) => {return new Promise((resolve, reject) => { })},
     createAccount: (email: string, name: string, password1: string, password2: string) => {return new Promise((res, rej) => {})},
-    logout: () => {},
     auth: initialState
 };
 
@@ -72,7 +70,6 @@ export const AuthProvider: React.FC<ChildProps> = ({ children }) => {
                     email: user.email
                 });
                 
-                console.log('autenticado');
                 resolve(true);
             } else {
                 setAuth({
@@ -125,10 +122,6 @@ export const AuthProvider: React.FC<ChildProps> = ({ children }) => {
         });
     }
   }
-
-  const logout = () => {
-    console.log('logout');
-  }
  
   return (
     <AuthContext.Provider value={{
@@ -136,7 +129,6 @@ export const AuthProvider: React.FC<ChildProps> = ({ children }) => {
         verifyToken,
         login,
         createAccount,
-        logout
     }}>
         { children }
     </AuthContext.Provider>

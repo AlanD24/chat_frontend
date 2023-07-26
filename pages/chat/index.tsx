@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styles from '../../styles/Chat.module.scss';
 import '../../styles/globals.css';
 import SideNavOpts from "@/components/SideNavOpts";
@@ -8,6 +8,8 @@ import { Box, Modal, Typography } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import { useRouter } from "next/router";
+import { ChatContext } from "@/context/chat/ChatContext";
+import { types } from "@/types/types";
 
 const BoxStyles = {
     position: 'absolute' as 'absolute',
@@ -28,14 +30,10 @@ export default function ChatPage() {
     // States to save/update data
     const [open, setOpen] = useState(false);
     const [iconName, setIconName] = useState("messagesIcon");
+    const { dispatch } = useContext( ChatContext );
 
     // Use nextjs router
     const router = useRouter();
-
-    // Check token once it loads for first time
-    useEffect(() => {
-        checkToken();
-    }, []);
 
     const checkToken = () => {
         const userToken = localStorage.getItem('token');
@@ -51,13 +49,27 @@ export default function ChatPage() {
     }
 
     const logout = () => {
+        clearChatState();
         localStorage.removeItem('token');
-        router.push('/login');
+        router.reload();
     }
+
+    const clearChatState = () => {
+        dispatch({ type: types.clearChatState });
+    }
+
+    // Check token once it loads for first time
+    useEffect(() => {
+        checkToken();
+    }, []);
 
     return <div className={ styles.chatContainer }>
         {/* Buttons of sidenav */}
-        <SideNavOpts setOpen={setOpen} iconName={iconName} setIconName={setIconName}></SideNavOpts>
+        <SideNavOpts 
+            setOpen={setOpen} 
+            iconName={iconName} 
+            setIconName={setIconName}
+        ></SideNavOpts>
 
         {/* Users contact list */}
         <ContacsList></ContacsList>
@@ -82,7 +94,7 @@ export default function ChatPage() {
                     <Button variant="contained" className={ styles.cancelBtn } onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button variant="contained" color='error' onClick={ logout } href="/login">
+                    <Button variant="contained" color='error' onClick={ logout }>
                         Logout
                     </Button>
                 </Stack>

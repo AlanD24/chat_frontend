@@ -175,7 +175,9 @@
 
 .conversations {
     width: 100%;
+    max-height: 500px;
     margin: 0 auto;
+    overflow-y: scroll;
 }
 
 .activeUser {
@@ -193,6 +195,18 @@
 
 .activeUserImg {
     width: 15%;
+    position: relative;
+    display: inline-block;
+}
+
+.isConnected {
+    height: 12px;
+    width: 12px;
+    background-color: #47D42E;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 5px;
 }
 
 .activeUserData {
@@ -294,6 +308,7 @@
 .midMessages {
     height: 72%;
     padding: 20px;
+    overflow-y: scroll;
 }
 
 .incomingMsg {
@@ -342,8 +357,12 @@
     align-items: center;
 }
 
-.sendMessageBar {
+.formSendMessage {
     width: 80%;
+}
+
+.sendMessageBar {
+    width: 100%;
     background-color: #E8ECF8;
     border-radius: 30px;
     outline: none;

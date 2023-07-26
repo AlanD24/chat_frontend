@@ -3,6 +3,7 @@ import LoginPage from './login';
 import { useContext, useEffect, useState } from 'react';
 import ChatPage from './chat';
 import { SocketProvider } from '@/context/SocketContext';
+import { ChatProvider } from '@/context/chat/ChatContext';
 
 export function HomePage() {
 
@@ -24,28 +25,27 @@ export function HomePage() {
 
   return (
     <div>
-        { auth.checking ?
-              <h1>Espere por favor...</h1>
-          :
-            <>
-              { existToken ?
-                  <ChatPage></ChatPage>
-                :
-                  <LoginPage></LoginPage>
-              }
-            </>
-        }
+      { auth.checking ? (
+          <h1>Espere por favor...</h1>
+        ) : existToken ? (
+          <ChatPage></ChatPage>
+        ) : (
+          <LoginPage></LoginPage>
+        )
+      }
     </div>
   )
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <SocketProvider>
-        <HomePage />
-      </SocketProvider>
-    </AuthProvider>
+    <ChatProvider>
+      <AuthProvider>
+        <SocketProvider>
+          <HomePage />
+        </SocketProvider>
+      </AuthProvider>
+    </ChatProvider>
   )
 }
 

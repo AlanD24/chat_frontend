@@ -73,7 +73,7 @@ export default function LoginPage() {
                 saveToken(response.token);
                 
                 setTimeout(() => {
-                    router.push('/chat');
+                    router.reload();
                 }, 1500);
             } else
                 toast.error('Ups! Could not log in');
@@ -111,13 +111,6 @@ export default function LoginPage() {
     function saveToken(token: string): void {
         localStorage.setItem('token', token);
     }
-
-    useEffect(() => {
-        const userToken = localStorage.getItem('token');
-        /* if(userToken)
-            router.push('/chat');
-        */
-    }, []);
 
     return <div className={styles.limiter}>
         <div className={styles.loginContainer}>
