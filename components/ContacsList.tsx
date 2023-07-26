@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styles from "../styles/Chat.module.scss";
 import Image from "next/image";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,28 +16,14 @@ import { AuthContext } from "@/auth/AuthContext";
 import { types } from "@/types/types";
 import { fetchWithToken } from "@/helpers/fetch";
 import { scrollToBottom } from "@/helpers/scrollToBottom";
+import SearchUser from "./SearchUser";
 
 export default function ContacsList() {
 
-  // useState for searchUserInput
-  const [search, setSearch] = useState("");
-
   const { chatState } = useContext( ChatContext );
-  const { users } = chatState;
   const { auth } = useContext( AuthContext );
   const { _id } = auth;
-
-  // Executed every time an input changes
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Get inputName and inputValue from event
-    const { name, value } = e.target;
-
-    // Reject in case event.target would not be an object
-    if (typeof name !== "string") return;
-
-    // Set search
-    setSearch(value);
-  };
+  const [ users, setUsers ] = useState([]);
 
   const { dispatch } = useContext( ChatContext );
 
@@ -62,13 +48,19 @@ export default function ContacsList() {
     scrollToBottom('messages');
   }
 
+  useEffect(() => {
+    ( chatState.usersCopy.length >= 1 )
+      ? setUsers( chatState.usersCopy )
+      : setUsers( chatState.users );
+  }, [ chatState ]);
+
   return (
     <div className={styles.recentChats}>
       {/* User data begins */}
       <div className={styles.userData}>
         <Image
           className={styles.userImage}
-          src="/luffy_wano.jpg"
+          src="/user.png"
           alt="userImg"
           width={70}
           height={70}
@@ -76,7 +68,7 @@ export default function ContacsList() {
 
         ></Image>
         <div className={styles.userName}>
-          <h3>Monkey D Luffy</h3>
+          <h3>{ auth.name }</h3>
           <p>Strawhat's pirates captain</p>
         </div>
         <div className={styles.editIcon}>
@@ -86,32 +78,7 @@ export default function ContacsList() {
       {/* User data ends */}
 
       {/* Searchbox begins */}
-      <div className={styles.searchContainer}>
-        <FormControl variant="outlined" className={styles.searchBar}>
-          <OutlinedInput
-            className={styles.searchInput}
-            type="text"
-            label="search"
-            name="search"
-            value={search}
-            onChange={handleInputChange}
-            style={{ borderRadius: '30px' }}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  edge="start"
-                >
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-          <InputLabel className={`${styles.searchLabel}`}>
-            Search
-          </InputLabel>
-        </FormControl>
-      </div>
+      <SearchUser></SearchUser>
       {/* Searchbox ends */}
 
       {/* Sidebar begins */}

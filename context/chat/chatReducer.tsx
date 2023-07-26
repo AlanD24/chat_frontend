@@ -46,6 +46,11 @@ export const chatReducer = ( chatState: any, action: any ) => {
                 users: [], // all users from DB
                 messages: [] // chat selected
             }
+        case types.filterUsers:
+            return {
+                ...chatState,
+                usersCopy: [ ...action.payload ]
+            }
         default:
             return chatState;
     }

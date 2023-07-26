@@ -1,8 +1,9 @@
 export interface MessageModel {
-    _id: string,
-    from: string,
-    to: string,
-    message: string,
+    _id: String,
+    from: String,
+    to: String,
+    message: String,
+    seen: Boolean,
     createdAt: Date,
     updatedAt: Date,
 }

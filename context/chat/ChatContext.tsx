@@ -21,6 +21,7 @@ const initialState = {
     _id: "",
     activeChat: null, // _user of the other user who
     users: [], // all users from DB
+    usersCopy: [],
     messages: [] // chat selected
 }
 
