@@ -118,7 +118,6 @@ export const AuthProvider: React.FC<ChildProps> = ({ children }) => {
     } catch (error) {
         return new Promise((res, rej) => {
             res(error);
-            rej(error);
         });
     }
   }

@@ -44,14 +44,14 @@ export default function SendMessage() {
         to: chatState.activeChat,
         message: message
     });
-
-
-    // Make dispatch of message
   }
 
   return (
     <div className={styles.endMessages}>
-    <form onSubmit={ sendMessage } className={ styles.formSendMessage }>
+    <form 
+      onSubmit={ sendMessage } 
+      className={`${styles.formSendMessage} ${ chatState.activeChat == null && styles.hideDiv }`}
+    >
       <FormControl 
         variant="outlined" 
         className={styles.sendMessageBar}

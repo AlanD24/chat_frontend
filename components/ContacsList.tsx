@@ -20,10 +20,11 @@ import SearchUser from "./SearchUser";
 
 export default function ContacsList() {
 
+  const [ users, setUsers ] = useState<UserModel[]>([]);
+  const [ lastMessages, setLastMessges ] = useState([] as any[]);
   const { chatState } = useContext( ChatContext );
   const { auth } = useContext( AuthContext );
   const { _id } = auth;
-  const [ users, setUsers ] = useState([]);
 
   const { dispatch } = useContext( ChatContext );
 
@@ -48,11 +49,30 @@ export default function ContacsList() {
     scrollToBottom('messages');
   }
 
+  const getLastMessages = async(users: UserModel[]) => {
+    // Send petition to backend
+    const endpoint: string = "messages/last-messages";
+    const data = JSON.stringify({ users });
+    const result = await fetchWithToken( endpoint, "POST", data);
+
+    // Set values
+    if( result.length > 0) {
+      setLastMessges( result );
+    }
+  }
+
   useEffect(() => {
     ( chatState.usersCopy.length >= 1 )
       ? setUsers( chatState.usersCopy )
       : setUsers( chatState.users );
-  }, [ chatState ]);
+  }, [ chatState, users ]);
+
+  useEffect(() => {
+    if( users.length >= 1 ) {
+      // Retrieve last message for each user
+      getLastMessages( users );
+    }
+  }, [ users ]);
 
   return (
     <div className={styles.recentChats}>
@@ -86,7 +106,7 @@ export default function ContacsList() {
         {/* Users list begins */}
           { 
             (users.length >= 1 ? 
-                users.filter((user: any) => user._user != _id).map((user: UserModel) =>
+                users.filter((user: any) => user._user != _id).map((user: UserModel, index: number) =>
                   <div 
                     className={ `${styles.activeUser}` } 
                     key={ user._user }
@@ -105,13 +125,21 @@ export default function ContacsList() {
                     <div className={ styles.activeUserData }>
                         <div className={ styles.innerUserData }>
                             <h5>{ user.name }</h5>
-                            <span className={ styles.deliverMessage }>6:13 pm</span>
+                            <span className={ styles.deliverMessage }>
+                              { lastMessages[index]?.hour }
+                            </span>
                         </div>
                         <div className={ styles.innerUserData }>
-                          <p>Lorem ipsum dolor sit amet agaga adipisicing elit.</p>
-                          <div className={ styles.messagesNotRead }>
+                          <p>
+                            { lastMessages[index]?.lastMessage ?
+                                lastMessages[index].lastMessage
+                              :
+                                'Be the first to say "Hi!"'
+                            }
+                          </p>
+                          { /* <div className={ styles.messagesNotRead }>
                             <span>1</span>
-                          </div>
+                          </div> */ }
                         </div>
                     </div>
                   </div>
