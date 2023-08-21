@@ -201,9 +201,9 @@ export default function LoginPage() {
                     <Toaster
                         toastOptions={{
                             success: {
-                            style: {
-                                color: 'green',
-                            },
+                                style: {
+                                    color: 'green',
+                                },
                             },
                             error: {
                                 style: {

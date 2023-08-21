@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import { useRouter } from "next/router";
 import { ChatContext } from "@/context/chat/ChatContext";
 import { types } from "@/types/types";
+import EditUserInfo from "@/components/EditUserInfo";
 
 const BoxStyles = {
     position: 'absolute' as 'absolute',
@@ -30,6 +31,7 @@ export default function ChatPage() {
     // States to save/update data
     const [open, setOpen] = useState(false);
     const [iconName, setIconName] = useState("messagesIcon");
+    const [ editUserInfo, setEditUserInfo] = useState<boolean>(false);
     const { dispatch } = useContext( ChatContext );
 
     // Use nextjs router
@@ -58,6 +60,11 @@ export default function ChatPage() {
         dispatch({ type: types.clearChatState });
     }
 
+    const handleChildButtonClick = (value: boolean) => {
+        // Aquí manejas el booleano recibido del componente hijo
+        setEditUserInfo(value);
+    };
+
     // Check token once it loads for first time
     useEffect(() => {
         checkToken();
@@ -72,10 +79,15 @@ export default function ChatPage() {
         ></SideNavOpts>
 
         {/* Users contact list */}
-        <ContacsList></ContacsList>
+        <ContacsList onButtonClick={ handleChildButtonClick }></ContacsList>
 
         {/* Chat messages */}
-        <Messages></Messages>
+        {
+            editUserInfo ?
+                <EditUserInfo></EditUserInfo>
+            :
+                <Messages></Messages>
+        }
 
         <Modal
             open={open}

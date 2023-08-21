@@ -16,6 +16,9 @@ const defaultUser: UserModel = {
   email: "",
   name: "",
   online: false,
+  lastMessage: "",
+  hour: "",
+  description: ""
 }
 
 export default function Messages() {
@@ -55,7 +58,7 @@ export default function Messages() {
           </div>
           <div className={styles.topUserContent}>
             <h5>{ receptorUser.name }</h5>
-            <p>Strawhat's chef</p>
+            <p>{ receptorUser?.description }</p>
           </div>
         </div>
 

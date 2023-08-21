@@ -1,0 +1,115 @@
+// Begins user edit info
+.editUserContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E8ECF8;
+    width: 70%;
+}
+
+.editInfoForm {
+    width: 60%;
+    min-height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.form {
+    width: 100%;
+    padding: 20px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.userImage {
+    margin: 0 auto;
+    border-radius: 50%;
+}
+
+.formTitle {
+    display: block;
+    width: 100%;
+    margin: 20px 0;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.inputContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-bottom: 20px;
+  
+    label {
+      margin-bottom: 5px;
+    }
+}
+
+.fileInputContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    input {
+        width: 70%;
+        margin: 0 auto !important;
+    }
+}
+
+.fullWidthInput {
+    width: 50%;
+    margin-top: 10px;
+    padding: 0;
+    border-radius: 4px;
+    font-size: 16px;
+  
+    label {
+      margin-top: -5px;
+      font-size: 14px;
+    }
+  
+    input {
+      padding: 10px 10px;
+    }
+  
+    &:focus-within label {
+      margin-top: 0 !important;
+      // background-color: white;
+    }
+  
+    &:focus-within input {
+      color: #1976d2;
+    }
+  
+  }
+
+.btnContainer {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  
+    button {
+      background-color: #39AFE5;
+      transition: all 200ms ease-out;
+      border-radius: 5px;
+      padding: 6px 0;
+      color: white;
+      width: 100%;
+  
+      &:hover {
+        background-color: #125F82;
+      }
+    }
+  }
+// Ends user edit info

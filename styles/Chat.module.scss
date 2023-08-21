@@ -352,13 +352,31 @@
     margin-bottom: 10px;
 }
 
+.twoRows {
+    max-width: 40%;
+    margin-left: 5px;
+
+    &:nth-child(2n - 1) {
+        margin-left: 0;
+        margin-right: 5px;
+    }
+}
+
+.dateHover {
+    display: none;
+    color: grey;
+    font-size: 12px;
+}
+
 .outgoingMsg_Text {
     background-color: #0A50B3;
     border-radius: 8px 8px 0 8px;
     padding: 5px 10px;
     color: white;
-    margin-right: 5px;
-    max-width: 40%;
+}
+
+.outgoingMsg_Text:hover + .dateHover {
+    display: block; /* Show p when mouse is on "outgoingMsg_Text" */
 }
 
 .incomingMsg_Text {
@@ -366,8 +384,10 @@
     border-radius: 8px 8px 8px 0;
     padding: 5px 10px;
     color: #4A4B50;
-    margin-left: 5px;
-    max-width: 40%;
+}
+
+.incomingMsg_Text:hover + .dateHover {
+    display: block; /* Show p when mouse is on "outgoingMsg_Text" */
 }
 
 .endMessages {
@@ -413,11 +433,11 @@
 
 // Modal styles begin
 .cancelBtn {
-    background-color: #E8ECF8 !important;
-    color: black;
+    background-color: #5D6580 !important;
+    transition: all 500ms ease-out !important;
 
     &:hover {
-        background-color: #C9D5F6 !important;
+        background-color: #1C2749 !important;
     }
 }
 // Modal styles end

@@ -31,14 +31,26 @@ export const fetchWithToken = async( endpoint: string, method: string = 'GET', d
         });
         return await resp.json();
     } else {
-        const resp = await fetch( url, {
-            method,
-            headers: {
-                'Content-Type': 'application/json',
-                'x-token': token
-            },
-            body: data
-        });
+        let resp;
+
+        if( data instanceof FormData ) {
+            resp = await fetch( url, {
+                method,
+                headers: {
+                    'x-token': token
+                },
+                body: data
+            });
+        } else {
+            resp = await fetch( url, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-token': token
+                },
+                body: data
+            });
+        }
 
         return await resp.json();
     }

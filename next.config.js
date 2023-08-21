@@ -4,6 +4,9 @@ const nextConfig = {
     env: {
         NEXT_APP_API_URL: "http://localhost:8080/api"
     },
+    images: {
+        domains: ['localhost']
+    },
 }
 
 module.exports = nextConfig

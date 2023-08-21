@@ -19,9 +19,13 @@ export default function IncomingMsg({ msg }: { msg: MessageModel}) {
                 ></Image>
             </div>
 
-            <div className={styles.incomingMsg_Text}>
-                <p>{ msg.message }</p>
-                {/* <p>{ date }</p> */}
+            <div className={ styles.twoRows }>
+                <div className={styles.incomingMsg_Text}>
+                    <p>{ msg.message }</p>
+                </div>
+                <p className={ styles.dateHover}>
+                    { date }
+                </p>
             </div>
         </div>
     )
