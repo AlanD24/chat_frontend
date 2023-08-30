@@ -15,6 +15,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 0 10px 0;
+    transition: all 500ms ease-out;
 
     .icons {
         display: flex;
@@ -100,6 +101,7 @@
     height: 100%;
     background-color: #F0F2F5;
     padding: 30px 20px;
+    transition: all 500ms ease-out;
 }
 
 .userData {
@@ -167,6 +169,7 @@
     width: 95%;
     background-color: white;
     border-radius: 30px;
+    transition: all 500ms ease-out;
 }
 
 .searchInput:focus-within {
@@ -212,12 +215,15 @@
 .activeUserData {
     width: 85%;
     padding-left: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .innerUserData {
     display: flex;
     justify-content: space-between;
     flex-wrap: nowrap;
+    width: 100%;
 
     h5 {
         color: #0A50B3;
@@ -271,6 +277,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 50px;
+    transition: all 500ms ease-out;
 }
 
 .hideDiv {
@@ -311,6 +318,7 @@
 .chatMessages {
     height: 72%;
     padding: 20px;
+    transition: all 500ms ease-out;
 }
 
 .noMsgsContainer {
@@ -400,6 +408,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 500ms ease-out;
 }
 
 .formSendMessage {
@@ -441,3 +450,125 @@
     }
 }
 // Modal styles end
+
+/**************** Responsive styles **************/
+@media screen and (max-width: 500px) {
+    .chatContainer {
+        flex-direction: column-reverse;
+    }
+
+    .sideNavOpts {
+        width: 100%;
+        height: 10%;
+        flex-direction: row;
+        z-index: 20;
+    }
+
+    .recentChats {
+        width: 100%;
+        height: 90%;
+    }
+
+    .hideConversations {
+        display: none;
+    }
+
+    .showMessages {
+        display: flex;
+    }
+
+    .icons {
+        flex-direction: row !important;
+        justify-content: space-around !important;
+        width: 30%;
+    }
+
+    .activeUserImg {
+        z-index: 1;
+    }
+}
+
+// Dark mode
+.sideNavOptsDark {
+    background: #514F5D;
+}
+
+.iconBgDark {
+    background-color: #032847;
+    svg {
+        color: white;
+    }
+}
+
+.recentChatsDark {
+    background-color: #252332;
+}
+
+.iconChatsDark {
+    background-color: #60636A;
+    svg {
+        color: white;
+    }
+}
+
+.userNameDark {
+    h3, h5 {
+        color: white;
+    }
+    p, span {
+        color: #9C9BA4;
+    }
+}
+
+.activeUserDark:hover {
+    background-color:  #1E1C27;
+}
+
+.searchBarDark, .sendMessageBarDark {
+    background-color: #1E1C27;
+    border-color: white !important;
+    label {
+        color: #55556D;
+    }
+}
+
+.searchInputDark, .searchIconDark {
+    color: #9C9BA4 !important;
+}
+
+.searchInputDark:focus-within {
+    color: white !important;
+}
+
+.searchBarDark:focus-within fieldset {
+    border-color: #9C9BA4 !important;
+}
+
+.searchBarDark:focus-within label {
+    color: #9C9BA4 !important;
+}
+
+.topMessagesDark, .endMessagesDark {
+    background-color: #3E3C4B;
+}
+
+.chatMessagesDark {
+    background-color: #5D5A6F;
+}
+
+.sendMessage__iconDark {
+    background-color: #60636A !important;
+}
+
+.incommingMsg_TextDark {
+    background: #3E3C4B;
+    color: white;
+}
+
+.dateHoverDark {
+    color: white;
+}
+
+.outgoingMsg_TextDark {
+    background-color: #032847;
+}

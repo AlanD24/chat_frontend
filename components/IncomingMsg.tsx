@@ -2,10 +2,12 @@ import Image from "next/image";
 import styles from "../styles/Chat.module.scss";
 import { MessageModel } from "@/models/Message.model";
 import { hourMonth } from "@/helpers/hourMonth";
+import { useDarkModeContext } from "@/context/DarkModeContext";
 
 export default function IncomingMsg({ msg }: { msg: MessageModel}) {
 
     const date = hourMonth( msg.createdAt );
+    const { isDarkMode } = useDarkModeContext();
 
     return (
         <div className={styles.incomingMsg}>
@@ -20,10 +22,10 @@ export default function IncomingMsg({ msg }: { msg: MessageModel}) {
             </div>
 
             <div className={ styles.twoRows }>
-                <div className={styles.incomingMsg_Text}>
+                <div className={`${styles.incomingMsg_Text} ${isDarkMode && styles.incommingMsg_TextDark}`}>
                     <p>{ msg.message }</p>
                 </div>
-                <p className={ styles.dateHover}>
+                <p className={`${styles.dateHover} ${isDarkMode && styles.dateHoverDark}`}>
                     { date }
                 </p>
             </div>

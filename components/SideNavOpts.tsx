@@ -3,9 +3,10 @@ import styles from "../styles/Chat.module.scss";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import DarkModeSharpIcon from "@mui/icons-material/DarkModeSharp";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import { useDarkModeContext } from "@/context/DarkModeContext";
 
 interface ChildProps {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>; // Tipo para la función setOpen del padre
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>; // Type for function setOpen of parent element
   iconName: string;
   setIconName: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -16,7 +17,7 @@ const SideNavOpts: React.FC<ChildProps> = ({
   setIconName,
 }) => {
   const [activeIcon, setActiveIconLocal] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
+  const { isDarkMode, toggleDarkMode } = useDarkModeContext();
 
   useEffect(() => {
     setActiveIconLocal(iconName);
@@ -26,12 +27,17 @@ const SideNavOpts: React.FC<ChildProps> = ({
     setOpen(true);
   };
 
+  const setDarkMode = () => {
+    toggleDarkMode();
+  }
+
   return (
-    <div className={styles.sideNavOpts}>
-      <div className="icons">
+    <div className={`${styles.sideNavOpts} ${isDarkMode && styles.sideNavOptsDark}`}>
+      <div className={styles.icons}>
         <div className={`
             ${styles.icon} 
             ${activeIcon == "messagesIcon" ? styles.active : ""}
+            ${isDarkMode && styles.iconBgDark}
         `}>
           <TelegramIcon
             onClick={() => setIconName("messagesIcon")}
@@ -41,19 +47,20 @@ const SideNavOpts: React.FC<ChildProps> = ({
 
         <div
           className={`${styles.icon} 
-          ${ darkMode ? styles.darkModeActive : styles.iconDark }
+          ${ isDarkMode ? styles.darkModeActive : styles.iconDark }
         `}>
           <DarkModeSharpIcon
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={setDarkMode}
             className={`${styles.sideIcon}`}
           />
         </div>
       </div>
 
-      <div className="icons">
+      <div className={styles.icons}>
         <div
           className={`${styles.icon} ${styles.logoutIcon}
           ${ activeIcon == "logoutIcon" ? styles.active : "" }
+          ${ isDarkMode && styles.iconBgDark }
         `}>
           <LogoutSharpIcon
             onClick={() => {

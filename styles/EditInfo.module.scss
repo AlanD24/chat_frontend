@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     background-color: #E8ECF8;
+    transition: all 500ms ease-out;
     width: 70%;
 }
 
@@ -15,6 +16,7 @@
     align-items: center;
     background-color: white;
     border-radius: 20px;
+    transition: all 500ms ease-out;
 }
 
 .form {
@@ -62,6 +64,18 @@
     input {
         width: 70%;
         margin: 0 auto !important;
+    }
+
+    input[type=file]::file-selector-button {
+      border: none;
+      padding: 5px 10px !important;
+      border-radius: 5px;
+      background-color: #E8ECF8;
+
+      &:hover {
+        cursor: pointer;
+        background-color: #CED2DE;
+      }
     }
 }
 
@@ -113,3 +127,66 @@
     }
   }
 // Ends user edit info
+
+// Dark mode
+.editUserContainerDark {
+  background-color: #3E3C4B;
+}
+
+.editInfoFormDark {
+  background-color: #252332;
+}
+
+.formTitleDak {
+  color: #DEDEDE;
+}
+
+.inputContainerDark {
+  label {
+    color: #5C5B6A !important;
+  }
+
+  &:focus-within label {
+    color: #9C9BA4 !important;
+  }
+}
+
+.textFieldDark {
+  background-color: #1E1C27;
+  input {
+    color: #55556D;
+  }
+  input:focus-within {
+    color: #9C9BA4;
+  }
+  input::selection {
+    background-color: #B2C5D9;
+  }
+  input:focus-within + fieldset {
+    border-color: #9C9BA4 !important;
+  }
+}
+
+.fileInputContainerDark {
+  input[type=file] {
+    color: #9C9BA4;
+  }
+
+  input[type=file]::file-selector-button {
+    background-color: #514F5D;
+    color: white;
+  
+    &:hover {
+      background-color: #706D7F;
+      cursor: pointer;
+    }
+  }
+} 
+
+.btnContainerDark button {
+  background-color: #514F5D;
+
+  &:hover {
+    background-color: #706D7F;
+  }
+}

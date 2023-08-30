@@ -1,5 +1,6 @@
-import React, { Dispatch, createContext, useReducer, useState } from "react";
+import React, { Dispatch, createContext, useEffect, useReducer, useState } from "react";
 import { chatReducer } from "./chatReducer";
+import { types } from "@/types/types";
 
 interface ChatContextType {
     chatState: any;
@@ -7,7 +8,7 @@ interface ChatContextType {
 }
 
 const defaultAuthContext: ChatContextType = {
-    chatState: [],
+    chatState: { users: [], usersCopy: [] },
     dispatch: () => {}
 };
 
@@ -28,6 +29,14 @@ const initialState = {
 export const ChatProvider: React.FC<ChildProps> = ({ children }) => {
   
   const [ chatState, dispatch ] = useReducer( chatReducer, initialState );
+
+  useEffect(() => {
+    if (chatState?.usersCopy?.length >= 1) {
+      dispatch({ type: types.setUsers, payload: chatState.usersCopy });
+    } else {
+      dispatch({ type: types.setUsers, payload: chatState.users });
+    }
+  }, [chatState.usersCopy, chatState.users]);
 
   return (
     <ChatContext.Provider value={{ chatState, dispatch }}>

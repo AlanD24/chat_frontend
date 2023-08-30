@@ -11,6 +11,7 @@ import React, { useContext, useState } from "react";
 import { SocketContext } from "@/context/SocketContext";
 import { AuthContext } from "@/auth/AuthContext";
 import { ChatContext } from "@/context/chat/ChatContext";
+import { useDarkModeContext } from "@/context/DarkModeContext";
 
 export default function SendMessage() {
 
@@ -19,6 +20,7 @@ export default function SendMessage() {
   const { socket } = useContext( SocketContext );
   const { auth } = useContext( AuthContext );
   const { chatState } = useContext( ChatContext );
+  const { isDarkMode } = useDarkModeContext();
 
   // Executed every time an input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,17 +49,17 @@ export default function SendMessage() {
   }
 
   return (
-    <div className={styles.endMessages}>
+    <div className={`${styles.endMessages} ${isDarkMode && styles.endMessagesDark}`}>
     <form 
       onSubmit={ sendMessage } 
       className={`${styles.formSendMessage} ${ chatState.activeChat == null && styles.hideDiv }`}
     >
       <FormControl 
         variant="outlined" 
-        className={styles.sendMessageBar}
+        className={`${styles.sendMessageBar} ${isDarkMode && styles.searchBarDark}`}
         >
         <OutlinedInput
-          className={styles.searchInput}
+          className={`${styles.searchInput} ${isDarkMode && styles.searchInputDark}`}
           type="text"
           label="message"
           name="message"
@@ -70,7 +72,7 @@ export default function SendMessage() {
                 aria-label="toggle password visibility"
                 edge="start"
                 color="default"
-                className={styles.sendMessage__icon}
+                className={`${styles.sendMessage__icon} ${isDarkMode && styles.sendMessage__iconDark}`}
                 type="submit"
               >
                 <SendIcon

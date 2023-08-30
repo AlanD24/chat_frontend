@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import ChatPage from './chat';
 import { SocketProvider } from '@/context/SocketContext';
 import { ChatProvider } from '@/context/chat/ChatContext';
+import { DarkModeProvider } from '@/context/DarkModeContext';
 
 export function HomePage() {
 
@@ -42,7 +43,9 @@ function App() {
     <ChatProvider>
       <AuthProvider>
         <SocketProvider>
-          <HomePage />
+          <DarkModeProvider>
+            <HomePage />
+          </DarkModeProvider>
         </SocketProvider>
       </AuthProvider>
     </ChatProvider>

@@ -51,6 +51,8 @@ export const chatReducer = ( chatState: any, action: any ) => {
                 ...chatState,
                 usersCopy: [ ...action.payload ]
             }
+        case types.setUsers:
+            return { ...chatState, users: action.payload };
         default:
             return chatState;
     }

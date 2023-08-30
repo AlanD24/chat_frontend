@@ -61,7 +61,7 @@ export default function ChatPage() {
     }
 
     const handleChildButtonClick = (value: boolean) => {
-        // Aquí manejas el booleano recibido del componente hijo
+        // Receive data from child component
         setEditUserInfo(value);
     };
 
@@ -79,7 +79,7 @@ export default function ChatPage() {
         ></SideNavOpts>
 
         {/* Users contact list */}
-        <ContacsList onButtonClick={ handleChildButtonClick }></ContacsList>
+        <ContacsList showEditComponent={ handleChildButtonClick }></ContacsList>
 
         {/* Chat messages */}
         {

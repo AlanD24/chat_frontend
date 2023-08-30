@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
-import styles from "../styles/Chat.module.scss";
+import styles from "../../styles/Chat.module.scss";
 import Image from "next/image";
-import { ChatContext } from "@/context/chat/ChatContext";
-import SendMessage from "./SendMessage";
-import { AuthContext } from "@/auth/AuthContext";
+import { ChatContext, ChatProvider } from "@/context/chat/ChatContext";
+import SendMessage from "../../components/SendMessage";
+import { AuthContext, AuthProvider } from "@/auth/AuthContext";
 import { MessageModel } from "@/models/Message.model";
-import OutgoingMessage from "./OutgoingMsg";
-import IncomingMsg from "./IncomingMsg";
-import NoMessages from "./NoMessages";
+import OutgoingMessage from "../../components/OutgoingMsg";
+import IncomingMsg from "../../components/IncomingMsg";
+import NoMessages from "../../components/NoMessages";
 import { fetchWithToken } from "@/helpers/fetch";
 import { UserModel } from "@/models/User.model";
-import { useDarkModeContext } from "@/context/DarkModeContext";
+import { DarkModeProvider, useDarkModeContext } from "@/context/DarkModeContext";
+import { SocketProvider } from "@/context/SocketContext";
+import { useRouter } from "next/router";
 
 const defaultUser: UserModel = {
   _user: "",
@@ -22,12 +24,14 @@ const defaultUser: UserModel = {
   description: ""
 }
 
-export default function Messages() {
+export function MessagesResponsive() {
 
-  const { chatState } = useContext( ChatContext );
+  const [ chatState, setChatState ] = useState<any>(undefined);
   const { auth } = useContext( AuthContext );
   const [ receptorUser, setReceptorUser ] = useState<UserModel>(defaultUser);
   const { isDarkMode } = useDarkModeContext();
+  const router = useRouter();
+  const { data } = router.query;
 
   // Retrive userActiveChat data
   const getUser = async() => {
@@ -42,16 +46,25 @@ export default function Messages() {
   }
 
   useEffect(() => {
-    if( chatState.activeChat ) {
-      getUser();
+    if( chatState?.activeChat ) {
+        getUser();
     }
   }, [ chatState ]);
+
+  useEffect(() => {
+    if(data) {
+        const parsedData: any = data;
+        const chatAndId = JSON.parse(parsedData);
+        chatAndId.chatState.activeChat = chatAndId._id;
+        setChatState( chatState );
+    }
+  }, []);
 
   return (
     <div className={`${styles.messages}`}>
       {/* Top data begins */}
       <div className={`${styles.topMessages} ${isDarkMode && styles.topMessagesDark}`} >
-        <div className={`${styles.topLeftContent} ${ chatState.activeChat == null && styles.hideDiv }`}>
+        {/* <div className={`${styles.topLeftContent} ${ chatState.activeChat == null && styles.hideDiv }`}>
           <div className={styles.topImage}>
             <Image
               src="/user.png"
@@ -68,12 +81,12 @@ export default function Messages() {
           </div>
         </div>
 
-        <div className={styles.topRightContent}></div>
+        <div className={styles.topRightContent}></div> */}
       </div>
       {/* Top data ends */}
 
       {/* Container for messages begins */}
-      <div className={ `${styles.chatMessages} ${isDarkMode && styles.chatMessagesDark}` }>
+      {/* <div className={ `${styles.chatMessages} ${isDarkMode && styles.chatMessagesDark}` }>
         {
           chatState.activeChat ?
           (
@@ -104,12 +117,28 @@ export default function Messages() {
           :
             <NoMessages></NoMessages>
         }
-      </div>
+      </div> */}
       {/* Container for messages ends */}
 
       {/* Send message div begins */}
-        <SendMessage></SendMessage>
+        {/* <SendMessage></SendMessage> */}
       {/* Send message div ends */}
     </div>
   );
 }
+
+function chatResponsive() {
+    return (
+        <ChatProvider>
+      <AuthProvider>
+        <SocketProvider>
+            <DarkModeProvider>
+                <MessagesResponsive></MessagesResponsive>
+            </DarkModeProvider>
+        </SocketProvider>
+        </AuthProvider>
+        </ChatProvider>
+    )
+}
+
+export default chatResponsive;

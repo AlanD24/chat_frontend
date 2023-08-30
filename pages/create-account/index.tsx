@@ -190,7 +190,8 @@ export function CreateAccount() {
                             alt='userImg' 
                             width={100} 
                             height={100}
-                            objectFit="cover"
+                            style={{ objectFit: "cover" }}
+                            priority={true}
                         ></Image>
                     </div>
                     {/* /Image */}

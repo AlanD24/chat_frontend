@@ -11,6 +11,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserModel } from "@/models/User.model";
 import { ChatContext } from "@/context/chat/ChatContext";
 import { types } from "@/types/types";
+import { useDarkModeContext } from "@/context/DarkModeContext";
 
 export default function SearchUser() {
   // useState for searchUserInput
@@ -18,6 +19,7 @@ export default function SearchUser() {
   const [ usersCopy, setUsersCopy ] = useState<UserModel[]>([]);
 
   const { chatState, dispatch } = useContext( ChatContext );
+  const { isDarkMode } = useDarkModeContext();
 
   // Copy all users in other arr
   useEffect(() => {
@@ -67,15 +69,14 @@ export default function SearchUser() {
             results.push(userObj);
         }
     }
-
     return results;
   }
 
   return (
     <div className={styles.searchContainer}>
-      <FormControl variant="outlined" className={styles.searchBar}>
+      <FormControl variant="outlined" className={ `${styles.searchBar} ${isDarkMode && styles.searchBarDark}`}>
         <OutlinedInput
-          className={styles.searchInput}
+          className={ `${styles.searchInput} ${isDarkMode && styles.searchInputDark}`}
           type="text"
           label="search"
           name="search"
@@ -84,7 +85,7 @@ export default function SearchUser() {
           style={{ borderRadius: "30px" }}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton aria-label="toggle password visibility" edge="start">
+              <IconButton className={`${isDarkMode && styles.searchIconDark}`} aria-label="toggle password visibility" edge="start">
                 <SearchIcon />
               </IconButton>
             </InputAdornment>

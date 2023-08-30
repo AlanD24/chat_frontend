@@ -7,6 +7,7 @@ import { AuthContext } from '@/auth/AuthContext';
 import { ChatContext } from '@/context/chat/ChatContext';
 import { UserModel } from '@/models/User.model';
 import { useRouter } from 'next/router';
+import { useDarkModeContext } from '@/context/DarkModeContext';
 
 type StateUpdateFunctions = {
     [key: string]: Dispatch<SetStateAction<string>>;
@@ -23,7 +24,7 @@ export default function EditUserInfo() {
 
     // Retrieve data of user
     const { chatState } = useContext( ChatContext );
-    const { auth, getUserInfo, updateImageAuth } = useContext( AuthContext );
+    const { auth } = useContext( AuthContext );
     const { _id } = auth;
 
     // Use nextjs router
@@ -31,6 +32,9 @@ export default function EditUserInfo() {
 
     // Use authContext
     const { updateUserInfo } = useContext( AuthContext );
+
+    // Check dark mode context
+    const { isDarkMode } = useDarkModeContext();
 
     // Do dynamic changes in inputs value
     const stateUpdateFunctions: StateUpdateFunctions = {
@@ -90,8 +94,7 @@ export default function EditUserInfo() {
                     router.reload();
                 }, 1500);
             } else
-            toast.error('Ups! Could not update your info');
-
+                toast.error('Ups! Could not update your info');
         } catch (error) {
             toast.error('Ups! Could not update your info');
         }
@@ -115,16 +118,6 @@ export default function EditUserInfo() {
 
     const getAvatar = async(): Promise<void> => {
         const imageUrl: string = `http://localhost:8080/uploads/${auth.image}`;
-        console.log('old img', auth.image);
-        setAvatarSrc(imageUrl);
-    }
-
-    const setNewAvatar = async(): Promise<void> => {
-        const userInfo = await getUserInfo(auth._id);
-        const newImage = userInfo[0].image;
-        updateImageAuth(newImage);
-        console.log('new img', newImage);
-        const imageUrl: string = `http://localhost:8080/uploads/${newImage}`;
         setAvatarSrc(imageUrl);
     }
 
@@ -136,8 +129,8 @@ export default function EditUserInfo() {
         getAvatar();
     }, [ auth ]);
 
-    return <div className={ styles.editUserContainer }>
-        <div className={ styles.editInfoForm }>
+    return <div className={ `${styles.editUserContainer} ${isDarkMode && styles.editUserContainerDark}` }>
+        <div className={ `${styles.editInfoForm} ${isDarkMode && styles.editInfoFormDark}` }>
             { hasLoad && (
                 <form className={styles.form} onSubmit={ editUserInfo } encType="multipart/form-data">
                     <div className={styles.imageContainer}>
@@ -151,13 +144,16 @@ export default function EditUserInfo() {
                         ></Image>
                     </div>
 
-                    <span className={styles.formTitle}>
+                    <span className={`${styles.formTitle} ${isDarkMode && styles.formTitleDak}`}>
                         Edit user's info
                     </span>
                         
-                    <div className={styles.inputContainer}>
+                    <div className={`${styles.inputContainer} ${isDarkMode && styles.inputContainerDark}`}>
                         <TextField
-                            className={`${styles.fullWidthInput} ${userName.length > 0 ? styles.hasContent : ''}`}
+                            className={`${styles.fullWidthInput} 
+                                ${userName.length > 0 ? styles.hasContent : ''}
+                                ${isDarkMode && styles.textFieldDark}
+                            `}
                             label="Name" 
                             variant="outlined"
                             type="text" 
@@ -168,9 +164,12 @@ export default function EditUserInfo() {
                         />
                     </div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={`${styles.inputContainer} ${isDarkMode && styles.inputContainerDark}`}>
                         <TextField
-                            className={`${styles.fullWidthInput} ${description.length > 0 ? styles.hasContent : ''}`}
+                            className={`${styles.fullWidthInput} 
+                                ${description.length > 0 ? styles.hasContent : ''}
+                                ${isDarkMode && styles.textFieldDark}
+                            `}
                             label="Description" 
                             variant="outlined"
                             type="text" 
@@ -181,14 +180,14 @@ export default function EditUserInfo() {
                         />
                     </div>
 
-                    <div className={ styles.fileInputContainer }>
+                    <div className={ `${styles.fileInputContainer} ${isDarkMode && styles.fileInputContainerDark}` }>
                         <input
                             type="file"
                             onChange={ handleChange }
                         />
                     </div>
 
-                    <div className={styles.btnContainer}>
+                    <div className={`${styles.btnContainer} ${isDarkMode && styles.btnContainerDark}`}>
                         <button type="submit">
                             Submit
                         </button>
