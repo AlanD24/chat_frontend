@@ -54,12 +54,14 @@ export default function Messages() {
     if( chatState.activeChat ) {
       getUser();
     }
+  }, [ chatState ]);
 
+  useEffect(() => {
     if(auth.image) {
       const imageUrl: string = `http://localhost:8080/uploads/${auth.image}`;
       setAvatarImg(imageUrl);
     }
-  }, [ chatState ]);
+  }, [auth]);
 
   return (
     <div className={`${styles.messages}`}>

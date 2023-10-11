@@ -9,7 +9,6 @@ import { types } from "@/types/types";
 import { fetchWithToken } from "@/helpers/fetch";
 import { scrollToBottom } from "@/helpers/scrollToBottom";
 import SearchUser from "./SearchUser";
-import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { useDarkModeContext } from "@/context/DarkModeContext";
 import { useRouter } from "next/router";
 
@@ -25,8 +24,6 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
   const [ hideUsersList, setHideUsersList ] = useState<boolean>(false);
   const [ showEdit, setShowEdit ] = useState<boolean>(false);
 
-  const { width } = useWindowDimensions();
-
   const { chatState } = useContext( ChatContext );
   const { auth } = useContext( AuthContext );
   const { isDarkMode } = useDarkModeContext();
@@ -38,13 +35,6 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
   const router = useRouter();
 
   const setActiveChat = async (user: UserModel) => {
-    if( width <= 500 ) {
-      const dataToSend = { chatState, _id };
-      // router.push({
-      //   pathname: '/chatResponsive',
-      //   query: { data: JSON.stringify(dataToSend) }
-      // });
-    }
     
     dispatch({
       type: types.activateChat,
