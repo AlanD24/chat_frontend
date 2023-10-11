@@ -116,17 +116,19 @@ export default function EditUserInfo() {
         setSelectedFile(file);
     }
 
-    const getAvatar = async(): Promise<void> => {
-        const imageUrl: string = `http://localhost:8080/uploads/${auth.image}`;
-        setAvatarSrc(imageUrl);
-    }
-
     useEffect(() => {
         checkUserLogged( _id, chatState );
-    }, []);
+    }, [ _id, chatState ]);
 
     useEffect(() => {
-        getAvatar();
+        const getAvatar = async(): Promise<void> => {
+            const imageUrl: string = `http://localhost:8080/uploads/${auth.image}`;
+            setAvatarSrc(imageUrl);
+        }
+
+        if(auth.image) {
+            getAvatar();
+        }
     }, [ auth ]);
 
     return <div className={ `${styles.editUserContainer} ${isDarkMode && styles.editUserContainerDark}` }>
@@ -136,7 +138,7 @@ export default function EditUserInfo() {
                     <div className={styles.imageContainer}>
                         <Image 
                             className={styles.userImage} 
-                            src={ avatarSrc }
+                            src={ avatarSrc ? avatarSrc : "/user.png" }
                             alt='user' 
                             width={100} 
                             height={100}
@@ -145,7 +147,7 @@ export default function EditUserInfo() {
                     </div>
 
                     <span className={`${styles.formTitle} ${isDarkMode && styles.formTitleDak}`}>
-                        Edit user's info
+                        Edit user&#39;s info
                     </span>
                         
                     <div className={`${styles.inputContainer} ${isDarkMode && styles.inputContainerDark}`}>

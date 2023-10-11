@@ -5,5 +5,6 @@ export interface UserModel {
     _user: string,
     lastMessage: string,
     hour: string,
-    description: string
+    description: string,
+    image: string
 }

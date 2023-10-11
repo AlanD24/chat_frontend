@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { ChatContext } from "@/context/chat/ChatContext";
 import { types } from "@/types/types";
 import EditUserInfo from "@/components/EditUserInfo";
+import { DarkModeProvider } from "@/context/DarkModeContext";
 
 const BoxStyles = {
     position: 'absolute' as 'absolute',
@@ -26,7 +27,7 @@ const BoxStyles = {
     borderRadius: '10px'
 };
 
-export default function ChatPage() {
+export function ChatPage() {
 
     // States to save/update data
     const [open, setOpen] = useState(false);
@@ -36,13 +37,6 @@ export default function ChatPage() {
 
     // Use nextjs router
     const router = useRouter();
-
-    const checkToken = () => {
-        const userToken = localStorage.getItem('token');
-
-        if(!userToken || userToken === '')
-            router.push('/');
-    }
 
     // When close modal
     const handleClose = () => {
@@ -67,8 +61,15 @@ export default function ChatPage() {
 
     // Check token once it loads for first time
     useEffect(() => {
+        const checkToken = () => {
+            const userToken = localStorage.getItem('token');
+    
+            if(!userToken || userToken === '')
+                router.push('/');
+        }
+
         checkToken();
-    }, []);
+    }, [ router ]);
 
     return <div className={ styles.chatContainer }>
         {/* Buttons of sidenav */}
@@ -114,3 +115,13 @@ export default function ChatPage() {
         </Modal>
     </div>
 }
+
+function Chat() {
+    return (
+        <DarkModeProvider>
+            <ChatPage></ChatPage>
+        </DarkModeProvider>
+    )
+}
+
+export default Chat;

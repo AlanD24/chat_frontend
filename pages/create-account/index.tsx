@@ -122,7 +122,7 @@ export function CreateAccount() {
         const userToken = localStorage.getItem('token');
         if(userToken)
             router.push('/chat');
-    }, []);
+    }, [ router ]);
 
     function validateEmail(): boolean {
         let isValid: boolean = true;

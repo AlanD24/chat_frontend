@@ -7,7 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
 import { AuthContext } from '@/auth/AuthContext';
-import { fetchWithoutToken } from '@/helpers/fetch';
+import Link from 'next/link';
 
 type StateUpdateFunctions = {
     [key: string]: Dispatch<SetStateAction<string>>;
@@ -192,9 +192,9 @@ export default function LoginPage() {
                         </div>
 
                         <div className={styles.columnOption}>
-                            <a href="/create-account">
-                                Don't have account?
-                            </a>
+                            <Link href="/create-account">
+                                Don&#39;t have account?
+                            </Link>
                         </div>
                     </div>
 

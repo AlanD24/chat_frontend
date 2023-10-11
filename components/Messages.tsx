@@ -19,7 +19,8 @@ const defaultUser: UserModel = {
   online: false,
   lastMessage: "",
   hour: "",
-  description: ""
+  description: "",
+  image: ""
 }
 
 export default function Messages() {
@@ -28,22 +29,35 @@ export default function Messages() {
   const { auth } = useContext( AuthContext );
   const [ receptorUser, setReceptorUser ] = useState<UserModel>(defaultUser);
   const { isDarkMode } = useDarkModeContext();
-
-  // Retrive userActiveChat data
-  const getUser = async() => {
-    try {
-      const endpoint: string = `auth/user/${chatState.activeChat}`;
-      const response = await fetchWithToken( endpoint );
-      
-      setReceptorUser(response[0]);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [ avatarImg, setAvatarImg ] = useState("");
+  const [ receptorImg, setReceptorImg ] = useState("");
 
   useEffect(() => {
+    // Retrive userActiveChat data
+    const getUser = async() => {
+      try {
+        const endpoint: string = `auth/user/${chatState.activeChat}`;
+        const response = await fetchWithToken( endpoint );
+        setReceptorUser(response[0]);
+
+        if(response[0].image) {
+          const imageUrl: string = `http://localhost:8080/uploads/${response[0].image}`;
+          setReceptorImg(imageUrl);
+        } else {
+          setReceptorImg("/user.png");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
     if( chatState.activeChat ) {
       getUser();
+    }
+
+    if(auth.image) {
+      const imageUrl: string = `http://localhost:8080/uploads/${auth.image}`;
+      setAvatarImg(imageUrl);
     }
   }, [ chatState ]);
 
@@ -54,7 +68,7 @@ export default function Messages() {
         <div className={`${styles.topLeftContent} ${ chatState.activeChat == null && styles.hideDiv }`}>
           <div className={styles.topImage}>
             <Image
-              src="/user.png"
+              src={ receptorImg ? receptorImg : "/user.png"}
               alt="userImg"
               width={100}
               height={100}
@@ -89,11 +103,13 @@ export default function Messages() {
                         <IncomingMsg 
                           key={ `msg_${msg._id}` }
                           msg={ msg }
+                          image={ receptorImg ?? "/user.png" }
                         ></IncomingMsg>
                       :
                         <OutgoingMessage 
                           key={ `msg_${msg._id}` }
                           msg={ msg }
+                          image={ avatarImg ?? "/user.png" }
                         ></OutgoingMessage>
                   )
                 :

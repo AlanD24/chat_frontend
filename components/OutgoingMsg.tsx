@@ -4,7 +4,7 @@ import { MessageModel } from "@/models/Message.model";
 import { hourMonth } from "@/helpers/hourMonth";
 import { useDarkModeContext } from "@/context/DarkModeContext";
 
-export default function OutgoingMessage({ msg }: { msg: MessageModel}) {
+export default function OutgoingMessage({ msg, image }: { msg: MessageModel, image: string}) {
 
     const date = hourMonth( msg.createdAt );
     const { isDarkMode } = useDarkModeContext();
@@ -27,7 +27,7 @@ export default function OutgoingMessage({ msg }: { msg: MessageModel}) {
             <div className="outgoingMsg_image">
                 <Image
                 className={styles.userImage}
-                src="/luffy_wano.jpg"
+                src={image != "" ? image : "/user.png"}
                 alt="userImg"
                 width={40}
                 height={40}

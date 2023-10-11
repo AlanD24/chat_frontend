@@ -22,7 +22,6 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
   const [ users, setUsers ] = useState<UserModel[]>([]);
   const [ doLoad, setDoLoad ] = useState<boolean>(false);
   const [ avatarSrc, setAvatarSrc ] = useState("");
-  const [ userHasImage, setUserHasImage ] = useState<boolean>(false);
   const [ hideUsersList, setHideUsersList ] = useState<boolean>(false);
   const [ showEdit, setShowEdit ] = useState<boolean>(false);
 
@@ -64,25 +63,6 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
 
     // Move to bottom of the chat
     scrollToBottom('messages');
-  }
-
-  const getLastMessages = async(users: UserModel[]) => {
-    // Send petition to backend
-    const endpoint: string = "messages/last-messages";
-    const data = JSON.stringify({ users });
-
-    try {
-      const result = await fetchWithToken( endpoint, "POST", data);
-
-      // Set last messages to users list
-      const updatedUsers = await setLastMessages( result, users );
-
-      // Sort users list, according if they have last message
-      const sortedUsers: UserModel[] = sortUsersList( updatedUsers.users );
-      setUsers(sortedUsers);
-    } catch (error) {
-      console.error("Error fetching last messages:", error);
-    }
   }
 
   const setLastMessages = async (result: any[], users: UserModel[]): Promise<any> => {
@@ -132,6 +112,11 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
     showEditComponent(showEdit);
   }
 
+  const displayUserImg = function(image: string): string {
+    const imageUrl: string = `http://localhost:8080/uploads/${image}`;
+    return imageUrl;
+  }
+
   useEffect(() => {
     ( chatState?.usersCopy.length >= 1 )
       ? setUsers( chatState.usersCopy )
@@ -139,6 +124,25 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
   }, [ chatState, users ]);
 
   useEffect(() => {
+    const getLastMessages = async(users: UserModel[]) => {
+      // Send petition to backend
+      const endpoint: string = "messages/last-messages";
+      const data = JSON.stringify({ users });
+  
+      try {
+        const result = await fetchWithToken( endpoint, "POST", data);
+  
+        // Set last messages to users list
+        const updatedUsers = await setLastMessages( result, users );
+  
+        // Sort users list, according if they have last message
+        const sortedUsers: UserModel[] = sortUsersList( updatedUsers.users );
+        setUsers(sortedUsers);
+      } catch (error) {
+        console.error("Error fetching last messages:", error);
+      }
+    }
+
     if( users.length >= 1 ) {
       // Retrieve last message for each user
       getLastMessages( users );
@@ -147,17 +151,13 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
 
   useEffect(() => {
     const getAndSetAvatar = async(): Promise<void> => {
-      if(!auth.image || auth.image == undefined) {
-        setUserHasImage(false);
-        return;
-      }
-
       const imageUrl: string = `http://localhost:8080/uploads/${auth.image}`;
       setAvatarSrc(imageUrl);
-      setUserHasImage(true)
     }
 
-    getAndSetAvatar();
+    if(auth.image) {
+      getAndSetAvatar();
+    }
   }, [ auth ]);
 
   return (
@@ -166,7 +166,7 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
       <div className={styles.userData}>
         <Image
           className={styles.userImage}
-          src={ !userHasImage ? '/user.png' : avatarSrc }
+          src={ avatarSrc != "" ? avatarSrc : '/user.png' }
           alt="userImg"
           width={70}
           height={70}
@@ -204,7 +204,7 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
                   >
                     <div className={ styles.activeUserImg }>
                       <Image
-                        src="/user.png"
+                        src={ user.image ? displayUserImg(user.image) : "/user.png"}
                         alt="userImg"
                         width={70}
                         height={70}
@@ -215,9 +215,9 @@ const ContacsList: React.FC<ContactsListProps> = function({ showEditComponent })
                     <div className={ styles.activeUserData }>
                         <div className={ `${styles.innerUserData} ${isDarkMode && styles.userNameDark}` }>
                             <h5>{ user.name }</h5>
-                            <span className={ styles.deliverMessage }>
+                            {/* <span className={ styles.deliverMessage }>
                               { user?.hour }
-                            </span>
+                            </span> */}
                         </div>
                         {/* <div className={ `${styles.innerUserData} ${isDarkMode && styles.userNameDark}` }>
                           <p>

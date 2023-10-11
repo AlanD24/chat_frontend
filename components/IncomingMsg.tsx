@@ -4,7 +4,7 @@ import { MessageModel } from "@/models/Message.model";
 import { hourMonth } from "@/helpers/hourMonth";
 import { useDarkModeContext } from "@/context/DarkModeContext";
 
-export default function IncomingMsg({ msg }: { msg: MessageModel}) {
+export default function IncomingMsg({ msg, image }: { msg: MessageModel, image: string }) {
 
     const date = hourMonth( msg.createdAt );
     const { isDarkMode } = useDarkModeContext();
@@ -13,7 +13,7 @@ export default function IncomingMsg({ msg }: { msg: MessageModel}) {
         <div className={styles.incomingMsg}>
             <div className="incomingMsg_image">
                 <Image
-                src="/sanji_smiling.jpg"
+                src={image != "" ? image : "/user.png"}
                 alt="userImg"
                 width={40}
                 height={40}
